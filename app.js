@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from"dotenv"
 import morgan from "morgan";
-
+import cors from "cors";
 //app.set("view engine", "ejs");
 //app.use(express.urlencoded({ extended: true }));
 // set env
@@ -18,6 +18,7 @@ dbConnection();
 const app = express();
 // middlewares
 app.use(express.json());
+app.use(cors());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -27,7 +28,10 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/v1/categories', categoryRoute);
 app.use('/api/v1/subcategories', subCategoryRoute);
 
-
+// Serve the front.html file
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'front.html'));
+});
 
 app.all('*',(req,res,next)=>{
   next(new ApiError(`cannot find this route ${req.originalUrl}`,400 ))

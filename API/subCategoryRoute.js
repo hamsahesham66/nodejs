@@ -12,7 +12,10 @@ import {
   getSubCategoryValidator,
   updateSubCategoryValidator,
 } from "../utils/validators/subCategoryValidator.js";
-const router = express.Router();
+
+// mergeParams middleware to make sure subcategory id is included in the request
+// ex we need to access category id from the category route
+const router = express.Router({ mergeParams: true });
 
 router
   .route("/")

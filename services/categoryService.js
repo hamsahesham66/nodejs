@@ -7,7 +7,7 @@ import ApiError from "../utils/apiError.js";
 // @access Public
 export const getCategory = asyncHandler(async (req, res) => {
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 5;
+  const limit = req.query.limit * 1 || 1000;
   const skip = (page - 1) * limit;
   const total = await CategoryModel.countDocuments();
 

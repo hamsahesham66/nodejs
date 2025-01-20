@@ -17,6 +17,10 @@ export const createSubCategory = asyncHandler(async (req, res) => {
   });
 
 // @desc Get list of subcategory
+// @route GET /api/v1/categories/:categoryId/subcategories
+// @access private
+
+// @desc Get list of subcategory
 // @route GET /api/v1/subcategories
 // @access private
 export const getSubCategory = asyncHandler(async (req, res) => {
@@ -24,8 +28,11 @@ export const getSubCategory = asyncHandler(async (req, res) => {
     const limit = req.query.limit * 1 || 5;
     const skip = (page - 1) * limit;
     const total = await subCategoryModel.countDocuments();
-  
-    const subCategories = await subCategoryModel.find({})
+     let filterObject = {};
+    // if you want to filter by category id
+     if (req.params.categoryId) filterObject = { category: req.params.categoryId };
+    console.log(req.params)
+    const subCategories = await subCategoryModel.find(filterObject)
       .skip(skip)
       .limit(limit)
     //  .populate("category", "name -_id") // if you want to fetch category name as well;

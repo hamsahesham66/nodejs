@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category & Subcategory Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Categories Dropdown -->
+    <section class="dropdown-section">
+      <h1>Categories</h1>
+      <select id="category-dropdown">
+        <option value="">Select Category</option>
+        <!-- Categories will be dynamically inserted here -->
+      </select>
+    </section>
+
+    <!-- Subcategories Dropdown -->
+    <section class="dropdown-section">
+      <h2>Subcategories</h2>
+      <select id="subcategory-dropdown" disabled>
+        <option value="">Select Subcategory</option>
+        <!-- Subcategories will be dynamically inserted here -->
+      </select>
+    </section>
+
+    <!-- Category CRUD Section -->
+    <section class="form-section">
+      <h3>Create Category</h3>
+      <form id="create-category-form">
+        <input type="text" id="category-name" placeholder="Category Name" required>
+        <button type="submit">Create Category</button>
+      </form>
+      <p id="create-category-error" class="error-message"></p>
+    </section>
+
+    <section class="form-section">
+      <h3>Update Category</h3>
+      <form id="update-category-form">
+        <input type="text" id="update-category-id" placeholder="Category ID" required>
+        <input type="text" id="update-category-name" placeholder="New Category Name" required>
+        <button type="submit">Update Category</button>
+      </form>
+      <p id="update-category-error" class="error-message"></p>
+    </section>
+
+    <section class="form-section">
+      <h3>Delete Category</h3>
+      <form id="delete-category-form">
+        <input type="text" id="delete-category-id" placeholder="Category ID" required>
+        <button type="submit">Delete Category</button>
+      </form>
+      <p id="delete-category-error" class="error-message"></p>
+    </section>
+
+    <!-- Subcategory CRUD Section -->
+    <section class="form-section">
+      <h3>Create Subcategory</h3>
+      <form id="create-subcategory-form">
+        <input type="text" id="subcategory-name" placeholder="Subcategory Name" required>
+        <select id="subcategory-category" required>
+          <option value="">Select Category</option>
+          <!-- Categories will be dynamically inserted here -->
+        </select>
+        <button type="submit">Create Subcategory</button>
+      </form>
+      <p id="create-subcategory-error" class="error-message"></p>
+    </section>
+
+    <section class="form-section">
+      <h3>Update Subcategory</h3>
+      <form id="update-subcategory-form">
+        <input type="text" id="update-subcategory-id" placeholder="Subcategory ID" required>
+        <input type="text" id="update-subcategory-name" placeholder="New Subcategory Name" required>
+        <select id="update-subcategory-category" required>
+          <option value="">Select New Category</option>
+          <!-- Categories will be dynamically inserted here -->
+        </select>
+        <button type="submit">Update Subcategory</button>
+      </form>
+      <p id="update-subcategory-error" class="error-message"></p>
+    </section>
+
+    <section class="form-section">
+      <h3>Delete Subcategory</h3>
+      <form id="delete-subcategory-form">
+        <input type="text" id="delete-subcategory-id" placeholder="Subcategory ID" required>
+        <button type="submit">Delete Subcategory</button>
+      </form>
+      <p id="delete-subcategory-error" class="error-message"></p>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
