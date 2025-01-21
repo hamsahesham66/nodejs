@@ -150,6 +150,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     event.preventDefault();
     const name = document.getElementById('subcategory-name').value;
     const categoryId = document.getElementById('subcategory-category').value;
+    if (!categoryId) {
+      createSubcategoryError.textContent = 'Please select a category.';
+      return;
+    }
+  
+    console.log('Selected Category ID:', categoryId);
     createSubcategoryError.textContent = '';
     try {
       const response = await fetch(`http://localhost:4000/api/v1/categories/${categoryId}/subcategories`, {

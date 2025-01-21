@@ -4,6 +4,11 @@ import asyncHandler from "express-async-handler";
 import ApiError from "../utils/apiError.js";
 
 
+export const setCategoryIdToBody = (req, res, next) => {
+    //nested routes
+  if (!req.body.category) req.body.category = req.params.categoryId;
+  next();
+}
 // @desc Create Subcategory
 // @route POST /api/v1/subcategories
 // @access private
@@ -16,9 +21,13 @@ export const createSubCategory = asyncHandler(async (req, res) => {
     res.status(201).json({ data: subCategory });
   });
 
-// @desc Get list of subcategory
-// @route GET /api/v1/categories/:categoryId/subcategories
-// @access private
+export const createFilterObject = (req,res,next) => {
+      // if you want to filter by category id
+  let filterObject = {};
+  if (req.params.categoryId) filterObject = { category: req.params.categoryId };
+  req.filterObject = filterObject;
+  next();
+}
 
 // @desc Get list of subcategory
 // @route GET /api/v1/subcategories
@@ -29,10 +38,8 @@ export const getSubCategory = asyncHandler(async (req, res) => {
     const skip = (page - 1) * limit;
     const total = await subCategoryModel.countDocuments();
      let filterObject = {};
-    // if you want to filter by category id
-     if (req.params.categoryId) filterObject = { category: req.params.categoryId };
-    console.log(req.params)
-    const subCategories = await subCategoryModel.find(filterObject)
+
+    const subCategories = await subCategoryModel.find(req.filterObject)
       .skip(skip)
       .limit(limit)
     //  .populate("category", "name -_id") // if you want to fetch category name as well;
