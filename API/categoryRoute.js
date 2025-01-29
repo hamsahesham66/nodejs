@@ -10,11 +10,12 @@ import{ createCategoryValidator
       , getCategoryValidator
       , updateCategoryValidator }from '../utils/validators/categoryValidator.js';
 import subCategoryRoute from './subCategoryRoute.js';
+import * as authService from '../services/authUserService.js';
 
 router.use('/:categoryId/subcategories',subCategoryRoute);
-router.route('/').get(getCategory).post(createCategoryValidator,createCategory);
+router.route('/').get(getCategory).post(authService.protect,authService.allowedRoles('admin','manager'),createCategoryValidator,createCategory);
 router.route('/:id').get(getCategoryValidator,getCategoryById)
-.put(updateCategoryValidator,updateCategoryById).
-delete(deleteCategoryValidator,deleteCategoryById)
+.put(authService.protect,authService.allowedRoles('admin','manager'),updateCategoryValidator,updateCategoryById).
+delete(authService.protect,authService.allowedRoles('admin','manager'),deleteCategoryValidator,deleteCategoryById)
 
 export default router;

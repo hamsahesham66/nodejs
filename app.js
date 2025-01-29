@@ -7,10 +7,15 @@ import cors from "cors";
 // set env
 dotenv.config({path:'config.env'})
 import dbConnection from './config/DataBase.js';
-import categoryRoute from './API/categoryRoute.js';
-import subCategoryRoute from './API/subCategoryRoute.js';
 import ApiError from "./utils/apiError.js";
 import globalError from "./middleware/errorMiddleWare.js";
+// routes 
+import categoryRoute from './API/categoryRoute.js';
+import subCategoryRoute from './API/subCategoryRoute.js';
+import brandRoute from './API/brandRoute.js';
+import productRoute from './API/productRoute.js';
+import userRoute from './API/userRoute.js';
+import authRoute from './API/authRoute.js';
 // connect with DB
 dbConnection();
 
@@ -27,10 +32,14 @@ if (process.env.NODE_ENV === 'development') {
 // mount route
 app.use('/api/v1/categories', categoryRoute);
 app.use('/api/v1/subcategories', subCategoryRoute);
+app.use('/api/v1/brands', brandRoute);
+app.use('/api/v1/products', productRoute);
+app.use('/api/v1/users', userRoute);
+app.use('/api/v1/auth', authRoute);
 
 // Serve the front.html file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'front.html'));
+  res.sendFile(path.join('index.html'));
 });
 
 app.all('*',(req,res,next)=>{

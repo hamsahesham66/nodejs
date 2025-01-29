@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 const schema=mongoose.Schema
 
 const userSchema= new schema({
@@ -24,9 +25,13 @@ const userSchema= new schema({
         required:[true,'password is required'],
         minlength:[6,'too short password']
     },
+    passwordChangedAt:Date,
+    passwordResetCode:String,
+    passwordResetExpire:Date,
+    passwordResetVerified:Boolean,
     role:{
         type:String,
-        enum:['user','admin'],
+        enum:['user','admin','manager'],
         default:'user',
     },
     active:{
@@ -38,5 +43,13 @@ const userSchema= new schema({
     {timestamps:true}
 )
 
-const UserModel=mongoose.model('user',userSchema)
+userSchema.pre('save', async function(next){
+    // only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) return next();
+    // hash the user password
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+
+})
+const UserModel=mongoose.model('User',userSchema)
 export default UserModel

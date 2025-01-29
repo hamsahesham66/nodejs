@@ -14,19 +14,19 @@ import {
   getSubCategoryValidator,
   updateSubCategoryValidator,
 } from "../utils/validators/subCategoryValidator.js";
-
+import * as authService from "../services/authUserService.js";
 // mergeParams middleware to make sure subcategory id is included in the request
 // ex we need to access category id from the category route
 const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
-  .post(setCategoryIdToBody,createSubCategoryValidator, createSubCategory)
+  .post(authService.protect,authService.allowedRoles('admin','manager'),setCategoryIdToBody,createSubCategoryValidator, createSubCategory)
   .get(createFilterObject,getSubCategory);
 router
   .route("/:id")
   .get(getSubCategoryValidator, getSubCategoryById)
-  .put(updateSubCategoryValidator, updateSubCategoryById)
-  .delete(deleteSubCategoryValidator, deleteSubCategoryById);
+  .put(authService.protect,authService.allowedRoles('admin','manager'),updateSubCategoryValidator, updateSubCategoryById)
+  .delete(authService.protect,authService.allowedRoles('admin','manager'),deleteSubCategoryValidator, deleteSubCategoryById);
 
 export default router;
