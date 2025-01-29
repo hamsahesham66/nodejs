@@ -1,3 +1,15 @@
+// Check if the user is authenticated
+function checkAuthentication() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'login.html'; // Redirect to login page if not authenticated
+  }
+}
+
+// Call the function to check authentication
+checkAuthentication();
+
+// Existing JavaScript for handling categories and subcategories
 document.addEventListener('DOMContentLoaded', async () => {
   const createCategoryError = document.getElementById('create-category-error');
   const updateCategoryError = document.getElementById('update-category-error');
@@ -9,7 +21,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Fetch and populate categories
   async function fetchCategories() {
     try {
-      const response = await fetch('http://localhost:4000/api/v1/categories');
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:4000/api/v1/categories', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const data = await response.json();
 
@@ -41,7 +56,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       if (!categoryId) return;
 
-      const response = await fetch(`http://localhost:4000/api/v1/categories/${categoryId}/subcategories`);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:4000/api/v1/categories/${categoryId}/subcategories`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const data = await response.json();
 
@@ -71,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (categoryId) {
       fetchSubcategories(categoryId);
     } else {
-      subcategoryDropdown.innerHTML = '';
+      subcategoryDropdown.innerHTML = '<option value="">Select Subcategory</option>';
       subcategoryDropdown.disabled = true;
     }
   });
@@ -85,9 +103,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const name = document.getElementById('category-name').value;
     createCategoryError.textContent = '';
     try {
+      const token = localStorage.getItem('token');
+
       const response = await fetch('http://localhost:4000/api/v1/categories', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),
       });
       if (!response.ok) {
@@ -108,9 +129,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const name = document.getElementById('update-category-name').value;
     updateCategoryError.textContent = '';
     try {
+      const token = localStorage.getItem('token');
+
       const response = await fetch(`http://localhost:4000/api/v1/categories/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),
       });
       if (!response.ok) {
@@ -131,8 +155,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const id = document.getElementById('delete-category-id').value;
     deleteCategoryError.textContent = '';
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:4000/api/v1/categories/${id}`, {
         method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json' },
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -158,10 +185,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Selected Category ID:', categoryId);
     createSubcategoryError.textContent = '';
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:4000/api/v1/categories/${categoryId}/subcategories`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
+        headers: { 'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json' },        body: JSON.stringify({ name }),
       });
       if (!response.ok) {
         const errorData = await response.json();
