@@ -118,3 +118,29 @@ export const deleteUserValidator = [
   check("id").isMongoId().withMessage("invalid User id format"),
   validatorMiddleWare,
 ];
+
+
+export const updateLoggedUserValidator = [
+  body("name").custom((val, { req }) => {
+    req.body.slug = slugify(val);
+    return true;
+  }),
+  check("email")
+  .notEmpty()
+  .withMessage("email required")
+  .isEmail()
+  .withMessage("Invalid email format")
+  .custom((val) =>
+    UserModel.findOne({ email: val }).then((user) => {
+      if (user) {
+        return Promise.reject(new Error("Email already in use"));
+      }
+    })),
+    check("phone")
+    .optional()
+    .isMobilePhone(["ar-EG", "ar-SA"])
+    .withMessage(
+      "Invalid phone number format only accepted for Egypt and Saudi Arabia"
+    ),
+  validatorMiddleWare,
+];
